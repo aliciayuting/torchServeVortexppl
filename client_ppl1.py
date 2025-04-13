@@ -65,7 +65,7 @@ def add_path_prefix_in_img_path(example, prefix):
 if __name__ == "__main__":
     BS = 1
     num_batches = 1
-    torchserve_url = "http://localhost:8080/predictions/monoflmr"
+    torchserve_url = "http://10.10.1.1:8080/predictions/monoflmr"
 
     checkpoint_path = 'LinWeizheDragon/PreFLMR_ViT-L'
     image_processor_name = 'openai/clip-vit-large-patch14'
