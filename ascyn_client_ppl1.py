@@ -94,9 +94,7 @@ async def send_request(session, batch_idx, payload, node_url):
             latency = end - start
             status = resp.status
             success = status == 200
-            if success:
-                print(f"[Batch {batch_idx}] {url}->  {latency:.4f}s")
-            else:
+            if not success:
                 text = await resp.text()
                 print(f"[Batch {batch_idx}] {url} -> {status} -> {text}")
             results_log.append((batch_idx, node_url, status, latency, success))
