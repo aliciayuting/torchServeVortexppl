@@ -64,7 +64,7 @@ def add_path_prefix_in_img_path(example, prefix):
 # ---------------------------------------------
 if __name__ == "__main__":
     BS = 1
-    num_batches = 10
+    num_batches = 1
     torchserve_url = "http://localhost:8080/predictions/monoflmr"
 
     checkpoint_path = 'LinWeizheDragon/PreFLMR_ViT-L'
@@ -124,6 +124,8 @@ if __name__ == "__main__":
             "question_ids": question_ids
         }
 
+        headers = {"Authorization": "GOJI"}
+        
         try:
             response = requests.post(torchserve_url, json=payload)
             if response.status_code == 200:
