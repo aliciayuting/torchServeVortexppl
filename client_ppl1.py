@@ -64,13 +64,13 @@ def add_path_prefix_in_img_path(example, prefix):
 # ---------------------------------------------
 if __name__ == "__main__":
     BS = 1
-    num_batches = 1000
+    num_batches = 10
     torchserve_url = "http://localhost:8080/predictions/monoflmr"
 
     checkpoint_path = 'LinWeizheDragon/PreFLMR_ViT-L'
     image_processor_name = 'openai/clip-vit-large-patch14'
-    ds_dir = "/mnt/nvme0/vortex_pipeline1/EVQA_data"
-    image_root_dir = "/mnt/nvme0/vortex_pipeline1"
+    ds_dir = "/mydata/EVQA/EVQA_data"
+    image_root_dir = "/mydata/EVQA"
     use_split = "train"
 
     flmr_config = FLMRConfig.from_pretrained(checkpoint_path)
