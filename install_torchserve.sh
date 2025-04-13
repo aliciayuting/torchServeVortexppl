@@ -1,1 +1,1 @@
-pip install torch torchserve torch-model-archiver
+pip install torch torchserve torch-model-archiver nvgpu
