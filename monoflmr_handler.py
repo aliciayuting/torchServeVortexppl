@@ -14,7 +14,7 @@ from transformers import AutoTokenizer, AutoImageProcessor
 class MonoFLMRHandler(BaseHandler):
     # Class-level log storage
     request_logs = []
-    log_threshold = 100
+    log_threshold = 1499
     log_path = "/users/TY373/workspace/torchServeVortexppl/inference_times.csv"  # Customize per node if needed (e.g., ./n0/inference_times.csv)
 
     def __init__(self):
@@ -57,7 +57,7 @@ class MonoFLMRHandler(BaseHandler):
         }
         """
         input_ids, attention_mask, pixel_values, question_ids, text_sequence = [], [], [], [], []
-        print(f"data len is {len(data)}", file=sys.stderr, flush=True)
+        # print(f"data len is {len(data)}", file=sys.stderr, flush=True)
         for record in data:
             input_data = record["body"]
             if isinstance(input_data, (bytes, bytearray)):
@@ -98,7 +98,7 @@ class MonoFLMRHandler(BaseHandler):
 
         if len(self.__class__.request_logs) >= self.__class__.log_threshold:
             self.write_logs()
-        print(f" ~~~~~~~~~~ logs len {len(self.__class__.request_logs) }", file=sys.stderr, flush=True)
+        # print(f" ~~~~~~~~~~ logs len {len(self.__class__.request_logs) }", file=sys.stderr, flush=True)
         return result
 
     def postprocess(self, inference_output):
@@ -134,4 +134,4 @@ class MonoFLMRHandler(BaseHandler):
             for start, end, dur in self.request_logs:
                 writer.writerow([start, end, dur])
 
-        self.__class__.request_logs.clear()
+        # self.__class__.request_logs.clear()
