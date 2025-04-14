@@ -79,6 +79,7 @@ class MonoFLMRHandler(BaseHandler):
         start_time = time.time()
 
         input_ids, attention_mask, pixel_values, question_ids, text_sequence = inputs
+        print(f" inference inputs len {len(inputs)}")
         result = self.pipeline.execFLMR(input_ids, attention_mask, pixel_values, question_ids, text_sequence)
 
         end_time = time.time()
