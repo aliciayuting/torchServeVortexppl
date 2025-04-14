@@ -46,18 +46,9 @@ class MonoFLMRHandler(BaseHandler):
         self.initialized = True
 
     def preprocess(self, data):
-        """
-        Expects batched JSON with:
-        {
-            "question_ids": [...],
-            "text_sequence": [...],
-            "input_ids": [[...]],
-            "attention_mask": [[...]],
-            "pixel_values": [[...]]
-        }
-        """
         input_ids, attention_mask, pixel_values, question_ids, text_sequence = [], [], [], [], []
-        # print(f"data len is {len(data)}", file=sys.stderr, flush=True)
+        start_time = time.perf_counter()
+
         for record in data:
             input_data = record["body"]
             if isinstance(input_data, (bytes, bytearray)):
@@ -74,13 +65,12 @@ class MonoFLMRHandler(BaseHandler):
             torch.tensor(attention_mask),
             torch.tensor(pixel_values),
             question_ids,
-            text_sequence
+            text_sequence,
+            start_time 
         )
 
     def inference(self, inputs):
-        start_time = time.time()
-
-        input_ids, attention_mask, pixel_values, question_ids, text_sequence = inputs
+        input_ids, attention_mask, pixel_values, question_ids, text_sequence, start_time = inputs
 
 
         result = self.pipeline.execFLMR(input_ids, attention_mask, pixel_values, question_ids, text_sequence)
@@ -89,16 +79,14 @@ class MonoFLMRHandler(BaseHandler):
         duration = end_time - start_time
         batch_size = len(question_ids)
 
-        # Split total duration equally for each item
         per_item_duration = duration / batch_size if batch_size > 0 else 0
         for i in range(batch_size):
-            start = start_time
-            end = start + per_item_duration
-            self.__class__.request_logs.append((start, end, per_item_duration))
+            self.__class__.request_logs.append((start_time, end_time, per_item_duration))
 
         if len(self.__class__.request_logs) >= self.__class__.log_threshold:
             self.write_logs()
         # print(f" ~~~~~~~~~~ logs len {len(self.__class__.request_logs) }", file=sys.stderr, flush=True)
+
         return result
 
     def postprocess(self, inference_output):
