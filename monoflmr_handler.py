@@ -22,6 +22,7 @@ class MonoFLMRHandler(BaseHandler):
         self.initialized = False
 
     def initialize(self, ctx):
+        print("MONOFLMR handler initialized", flush=True)
         properties = ctx.system_properties
         model_dir = properties.get("model_dir")
 
