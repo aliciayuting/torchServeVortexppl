@@ -47,7 +47,7 @@ class MonoFLMRHandler(BaseHandler):
 
     def preprocess(self, data):
         input_ids, attention_mask, pixel_values, question_ids, text_sequence = [], [], [], [], []
-        start_time = time.perf_counter()
+        start_time = time.time()
 
         for record in data:
             input_data = record["body"]
