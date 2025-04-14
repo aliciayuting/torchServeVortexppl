@@ -12,7 +12,7 @@ class MonoFLMRHandler(BaseHandler):
     # Class-level log storage
     request_logs = []
     log_threshold = 1000
-    log_path = "./inference_times.csv"  # Change this if needed
+    log_path = "./inference_times.csv"  # Customize per node if needed (e.g., ./n0/inference_times.csv)
 
     def __init__(self):
         super().__init__()
@@ -43,7 +43,7 @@ class MonoFLMRHandler(BaseHandler):
 
     def preprocess(self, data):
         """
-        Expects a JSON with fields:
+        Expects batched JSON with:
         {
             "question_ids": [...],
             "text_sequence": [...],
@@ -52,17 +52,26 @@ class MonoFLMRHandler(BaseHandler):
             "pixel_values": [[...]]
         }
         """
-        input_data = data[0]["body"]
-        if isinstance(input_data, (bytes, bytearray)):
-            input_data = json.loads(input_data.decode("utf-8"))
+        input_ids, attention_mask, pixel_values, question_ids, text_sequence = [], [], [], [], []
 
-        input_ids = torch.tensor(input_data["input_ids"])
-        attention_mask = torch.tensor(input_data["attention_mask"])
-        pixel_values = torch.tensor(input_data["pixel_values"])
-        question_ids = input_data["question_ids"]
-        text_sequence = input_data["text_sequence"]
+        for record in data:
+            input_data = record["body"]
+            if isinstance(input_data, (bytes, bytearray)):
+                input_data = json.loads(input_data.decode("utf-8"))
 
-        return input_ids, attention_mask, pixel_values, question_ids, text_sequence
+            input_ids.append(input_data["input_ids"][0])
+            attention_mask.append(input_data["attention_mask"][0])
+            pixel_values.append(input_data["pixel_values"][0])
+            question_ids.append(input_data["question_ids"][0])
+            text_sequence.append(input_data["text_sequence"][0])
+
+        return (
+            torch.tensor(input_ids),
+            torch.tensor(attention_mask),
+            torch.tensor(pixel_values),
+            question_ids,
+            text_sequence
+        )
 
     def inference(self, inputs):
         start_time = time.time()
@@ -72,9 +81,15 @@ class MonoFLMRHandler(BaseHandler):
 
         end_time = time.time()
         duration = end_time - start_time
+        batch_size = len(question_ids)
 
-        # Log this run
-        self.__class__.request_logs.append((start_time, end_time, duration))
+        # Split total duration equally for each item
+        per_item_duration = duration / batch_size if batch_size > 0 else 0
+        for i in range(batch_size):
+            start = start_time
+            end = start + per_item_duration
+            self.__class__.request_logs.append((start, end, per_item_duration))
+
         if len(self.__class__.request_logs) >= self.__class__.log_threshold:
             self.write_logs()
 
