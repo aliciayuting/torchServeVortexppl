@@ -1,2 +1,3 @@
 *.mar
 logs/
+config.properties
