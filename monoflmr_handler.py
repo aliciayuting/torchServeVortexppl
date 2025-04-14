@@ -55,7 +55,7 @@ class MonoFLMRHandler(BaseHandler):
         }
         """
         input_ids, attention_mask, pixel_values, question_ids, text_sequence = [], [], [], [], []
-        print(f"data len is {len(data)}", flush=True)
+        logging.warning(f"data len is {len(data)}")
         for record in data:
             input_data = record["body"]
             if isinstance(input_data, (bytes, bytearray)):
@@ -79,7 +79,7 @@ class MonoFLMRHandler(BaseHandler):
         start_time = time.time()
 
         input_ids, attention_mask, pixel_values, question_ids, text_sequence = inputs
-        print(f" inference inputs len {len(inputs)}", flush=True)
+        logging.warning(f" inference inputs len {len(inputs)}")
         result = self.pipeline.execFLMR(input_ids, attention_mask, pixel_values, question_ids, text_sequence)
 
         end_time = time.time()
@@ -103,7 +103,7 @@ class MonoFLMRHandler(BaseHandler):
 
     def write_logs(self):
         os.makedirs(os.path.dirname(self.log_path), exist_ok=True)
-        print(f"[TorchServe] Writing {len(self.request_logs)} log entries to {self.log_path}")
+        logging.warning(f"[TorchServe] Writing {len(self.request_logs)} log entries to {self.log_path}")
         with open(self.log_path, "a", newline="") as csvfile:
             writer = csv.writer(csvfile)
             if csvfile.tell() == 0:
