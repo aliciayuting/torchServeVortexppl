@@ -53,7 +53,7 @@ class MonoFLMRHandler(BaseHandler):
         }
         """
         input_ids, attention_mask, pixel_values, question_ids, text_sequence = [], [], [], [], []
-
+        print(f"data len is {len(data)}")
         for record in data:
             input_data = record["body"]
             if isinstance(input_data, (bytes, bytearray)):
