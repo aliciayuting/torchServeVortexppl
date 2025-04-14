@@ -15,7 +15,7 @@ class MonoFLMRHandler(BaseHandler):
     # Class-level log storage
     request_logs = []
     log_threshold = 497
-    log_path = "/users/TY373/workspace/torchServeVortexppl/inference_times.csv"  # Customize per node if needed (e.g., ./n0/inference_times.csv)
+    log_path = "/users/TY373/workspace/torchServeVortexppl/ppl1/inference_times.csv"  # Customize per node if needed (e.g., ./n0/inference_times.csv)
 
     def __init__(self):
         super().__init__()

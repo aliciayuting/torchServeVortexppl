@@ -1,7 +1,7 @@
 torch-model-archiver \
-  --model-name speech_pipeline \
+  --model-name monospeech \
   --version 1.0 \
-  --handler handler.py \
-  --extra-files model_pipeline.py,SenseVoice,data \
+  --handler speech_handler.py \
+  --extra-files speechRetrieve.py,SenseVoice \
   --export-path model_store \
   --force
