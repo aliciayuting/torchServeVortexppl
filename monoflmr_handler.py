@@ -14,8 +14,8 @@ from transformers import AutoTokenizer, AutoImageProcessor
 class MonoFLMRHandler(BaseHandler):
     # Class-level log storage
     request_logs = []
-    log_threshold = 249
-    log_path = "./inference_times.csv"  # Customize per node if needed (e.g., ./n0/inference_times.csv)
+    log_threshold = 200
+    log_path = "/users/TY373/workspace/torchServeVortexppl"  # Customize per node if needed (e.g., ./n0/inference_times.csv)
 
     def __init__(self):
         super().__init__()
@@ -98,7 +98,7 @@ class MonoFLMRHandler(BaseHandler):
 
         if len(self.__class__.request_logs) >= self.__class__.log_threshold:
             self.write_logs()
-        print(f" logs len {len(self.__class__.request_logs) }", file=sys.stderr, flush=True)
+        print(f" ~~~~~~~~~~ logs len {len(self.__class__.request_logs) }", file=sys.stderr, flush=True)
         return result
 
     def postprocess(self, inference_output):
