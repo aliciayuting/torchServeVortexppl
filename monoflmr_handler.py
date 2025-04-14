@@ -53,13 +53,20 @@ class MonoFLMRHandler(BaseHandler):
             input_data = record["body"]
             if isinstance(input_data, (bytes, bytearray)):
                 input_data = json.loads(input_data.decode("utf-8"))
+            cur_input_ids = input_data["input_ids"]
+            for idx, input_id in enumerate(cur_input_ids):
+                input_ids.append(input_id)
+                attention_mask.append(input_data["attention_mask"][idx])
+                pixel_values.append(input_data["pixel_values"][idx])
+                question_ids.append(input_data["question_ids"][idx])
+                text_sequence.append(input_data["text_sequence"][idx])
 
-            input_ids.append(input_data["input_ids"][0])
-            attention_mask.append(input_data["attention_mask"][0])
-            pixel_values.append(input_data["pixel_values"][0])
-            question_ids.append(input_data["question_ids"][0])
-            text_sequence.append(input_data["text_sequence"][0])
-            print(f"!!!!!!!!!  input data: {input_data}", file=sys.stderr, flush=True)
+            # input_ids.append(input_data["input_ids"])
+            # attention_mask.append(input_data["attention_mask"])
+            # pixel_values.append(input_data["pixel_values"])
+            # question_ids.append(input_data["question_ids"])
+            # text_sequence.append(input_data["text_sequence"])
+            # print(f"!!!!!!!!!  input data: {input_data}", file=sys.stderr, flush=True)
 
         return (
             torch.tensor(input_ids),
