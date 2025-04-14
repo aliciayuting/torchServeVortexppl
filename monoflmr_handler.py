@@ -85,7 +85,7 @@ class MonoFLMRHandler(BaseHandler):
 
         if len(self.__class__.request_logs) >= self.__class__.log_threshold:
             self.write_logs()
-        # print(f" ~~~~~~~~~~ logs len {len(self.__class__.request_logs) }", file=sys.stderr, flush=True)
+        print(f" ~~~~~~~~~~ logs len {len(self.__class__.request_logs) }", file=sys.stderr, flush=True)
 
         return result
 
