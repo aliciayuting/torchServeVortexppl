@@ -14,7 +14,7 @@ from transformers import AutoTokenizer, AutoImageProcessor
 class MonoFLMRHandler(BaseHandler):
     # Class-level log storage
     request_logs = []
-    log_threshold = 1499
+    log_threshold = 499
     log_path = "/users/TY373/workspace/torchServeVortexppl/inference_times.csv"  # Customize per node if needed (e.g., ./n0/inference_times.csv)
 
     def __init__(self):
