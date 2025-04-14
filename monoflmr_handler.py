@@ -81,7 +81,7 @@ class MonoFLMRHandler(BaseHandler):
         start_time = time.time()
 
         input_ids, attention_mask, pixel_values, question_ids, text_sequence = inputs
-        print(f" inference inputs len {len(inputs)}", file=sys.stderr, flush=True)
+
 
         result = self.pipeline.execFLMR(input_ids, attention_mask, pixel_values, question_ids, text_sequence)
 
@@ -98,7 +98,7 @@ class MonoFLMRHandler(BaseHandler):
 
         if len(self.__class__.request_logs) >= self.__class__.log_threshold:
             self.write_logs()
-
+        print(f" logs len {len(self.__class__.request_logs) }", file=sys.stderr, flush=True)
         return result
 
     def postprocess(self, inference_output):
