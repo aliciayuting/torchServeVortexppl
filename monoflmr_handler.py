@@ -55,7 +55,7 @@ class MonoFLMRHandler(BaseHandler):
         }
         """
         input_ids, attention_mask, pixel_values, question_ids, text_sequence = [], [], [], [], []
-        print(f"data len is {len(data)}")
+        print(f"data len is {len(data)}", flush=True)
         for record in data:
             input_data = record["body"]
             if isinstance(input_data, (bytes, bytearray)):
@@ -79,7 +79,7 @@ class MonoFLMRHandler(BaseHandler):
         start_time = time.time()
 
         input_ids, attention_mask, pixel_values, question_ids, text_sequence = inputs
-        print(f" inference inputs len {len(inputs)}")
+        print(f" inference inputs len {len(inputs)}", flush=True)
         result = self.pipeline.execFLMR(input_ids, attention_mask, pixel_values, question_ids, text_sequence)
 
         end_time = time.time()
