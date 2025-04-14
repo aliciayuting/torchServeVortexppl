@@ -111,7 +111,7 @@ class MonoFLMRHandler(BaseHandler):
         # Build the final path with throughput in filename
         base_path = self.log_path
         root, _ = os.path.splitext(base_path)
-        final_log_path = f"{root}_{throughput_str}.csv"
+        final_log_path = f"{root}.csv"
 
         print(f"[TorchServe] Writing {len(self.request_logs)} log entries to {final_log_path}", file=sys.stderr, flush=True)
 
