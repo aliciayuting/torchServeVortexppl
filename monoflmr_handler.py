@@ -14,8 +14,8 @@ from transformers import AutoTokenizer, AutoImageProcessor
 class MonoFLMRHandler(BaseHandler):
     # Class-level log storage
     request_logs = []
-    log_threshold = 200
-    log_path = "/users/TY373/workspace/torchServeVortexppl"  # Customize per node if needed (e.g., ./n0/inference_times.csv)
+    log_threshold = 100
+    log_path = "/users/TY373/workspace/torchServeVortexppl/inference_times.csv"  # Customize per node if needed (e.g., ./n0/inference_times.csv)
 
     def __init__(self):
         super().__init__()
@@ -105,13 +105,33 @@ class MonoFLMRHandler(BaseHandler):
         return [inference_output]
 
     def write_logs(self):
+        # Ensure the base directory exists
         os.makedirs(os.path.dirname(self.log_path), exist_ok=True)
-        print(f"[TorchServe] Writing {len(self.request_logs)} log entries to {self.log_path}", file=sys.stderr, flush=True)
 
-        with open(self.log_path, "a", newline="") as csvfile:
+        # Compute throughput: total requests / (last_end - first_start)
+        timestamps = self.request_logs
+        if len(timestamps) < 2:
+            return
+
+        first_start = timestamps[0][0]
+        last_end = timestamps[-1][1]
+        total_requests = len(timestamps)
+        time_span = last_end - first_start
+        throughput = total_requests / time_span if time_span > 0 else 0.0
+        throughput_str = f"{throughput:.2f}reqps"
+
+        # Build the final path with throughput in filename
+        base_path = self.log_path
+        root, _ = os.path.splitext(base_path)
+        final_log_path = f"{root}_{throughput_str}.csv"
+
+        print(f"[TorchServe] Writing {len(self.request_logs)} log entries to {final_log_path}", file=sys.stderr, flush=True)
+
+        with open(final_log_path, "a", newline="") as csvfile:
             writer = csv.writer(csvfile)
             if csvfile.tell() == 0:
                 writer.writerow(["start_time", "end_time", "latency_sec"])
             for start, end, dur in self.request_logs:
                 writer.writerow([start, end, dur])
+
         self.__class__.request_logs.clear()
