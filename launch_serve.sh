@@ -1,3 +1,4 @@
+export TS_LOG_CONFIG=/full/path/to/log4j.properties
 torchserve --start --model-store model_store\
     --models monoflmr.mar --disable-token-auth\
     --ts-config config.properties\
