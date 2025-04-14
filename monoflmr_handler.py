@@ -1,5 +1,6 @@
 import logging
 logging.basicConfig(level=logging.WARNING, force=True)
+import sys
 from ts.torch_handler.base_handler import BaseHandler
 import torch
 import json
@@ -55,7 +56,7 @@ class MonoFLMRHandler(BaseHandler):
         }
         """
         input_ids, attention_mask, pixel_values, question_ids, text_sequence = [], [], [], [], []
-        logging.warning(f"data len is {len(data)}")
+        print(f"data len is {len(data)}", file=sys.stderr, flush=True)
         for record in data:
             input_data = record["body"]
             if isinstance(input_data, (bytes, bytearray)):
@@ -79,7 +80,8 @@ class MonoFLMRHandler(BaseHandler):
         start_time = time.time()
 
         input_ids, attention_mask, pixel_values, question_ids, text_sequence = inputs
-        logging.warning(f" inference inputs len {len(inputs)}")
+        print(f" inference inputs len {len(inputs)}", file=sys.stderr, flush=True)
+
         result = self.pipeline.execFLMR(input_ids, attention_mask, pixel_values, question_ids, text_sequence)
 
         end_time = time.time()
@@ -103,7 +105,8 @@ class MonoFLMRHandler(BaseHandler):
 
     def write_logs(self):
         os.makedirs(os.path.dirname(self.log_path), exist_ok=True)
-        logging.warning(f"[TorchServe] Writing {len(self.request_logs)} log entries to {self.log_path}")
+        print(f"[TorchServe] Writing {len(self.request_logs)} log entries to {self.log_path}", file=sys.stderr, flush=True)
+
         with open(self.log_path, "a", newline="") as csvfile:
             writer = csv.writer(csvfile)
             if csvfile.tell() == 0:
