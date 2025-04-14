@@ -12,7 +12,7 @@ class MonoFLMRHandler(BaseHandler):
     # Class-level log storage
     request_logs = []
     log_threshold = 1000
-    log_path = "/tmp/inference_times.csv"  # Change this if needed
+    log_path = "./inference_times.csv"  # Change this if needed
 
     def __init__(self):
         super().__init__()
