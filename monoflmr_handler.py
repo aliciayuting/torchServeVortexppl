@@ -59,6 +59,7 @@ class MonoFLMRHandler(BaseHandler):
             pixel_values.append(input_data["pixel_values"][0])
             question_ids.append(input_data["question_ids"][0])
             text_sequence.append(input_data["text_sequence"][0])
+            print(f"!!!!!!!!!  input data: {input_data}", file=sys.stderr, flush=True)
 
         return (
             torch.tensor(input_ids),
