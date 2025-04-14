@@ -1,3 +1,5 @@
+import logging
+logging.getLogger().setLevel(logging.WARN)
 from ts.torch_handler.base_handler import BaseHandler
 import torch
 import json
