@@ -11,12 +11,13 @@ REMOTE_NODES = [
     "http://10.0.0.1:8080",
     "http://10.0.0.2:8080",
     "http://10.0.0.3:8080",
+    "http://10.0.0.4:8080",
 ]
 ENDPOINT_PATH = "/predictions/mono_speech"
 HEADERS = {"Authorization": "GOJI"}  # Optional, remove if token auth is off
 
 SEND_INTERVAL_SEC = 0.01
-MAX_REQUESTS = 1000
+MAX_REQUESTS = 10
 RESULT_LOG_PATH = "/tmp/async_audio_results.csv"
 
 BS = 1
@@ -54,6 +55,9 @@ async def send_request(session, batch_idx, payload, node_url):
             success = status == 200
             if not success:
                 text = await resp.text()
+                print(f"[Batch {batch_idx}] {url} -> {status} -> {text}")
+            else:
+                text = await resp.json()
                 print(f"[Batch {batch_idx}] {url} -> {status} -> {text}")
             results_log.append((batch_idx, node_url, status, latency, success))
     except Exception as e:
