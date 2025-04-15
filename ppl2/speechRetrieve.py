@@ -18,6 +18,7 @@ from torch.nn.utils.rnn import pad_sequence
 
 from funasr.utils.postprocess_utils import rich_transcription_postprocess
 from funasr.utils.load_utils import extract_fbank
+from FlagEmbedding import FlagModel
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "SenseVoice"))
 from SenseVoice.utils.frontend import WavFrontend, WavFrontendOnline
@@ -76,6 +77,22 @@ class AudioRecognition:
 
 
 
+class TextEncoder:
+    def __init__(self, device: str, model_name: str):
+        self.encoder = None
+        self.device = device
+        self.model_name = model_name
+        
+    def load_model(self):
+        self.encoder = FlagModel(self.model_name, devices=self.device)
+        print("Text Encoder model loaded")
+
+    def encoder_exec(self, query_list: list[str]) -> np.ndarray:
+        # Generate embedding dimesion of 384
+        if self.encoder is None:
+            self.load_model()
+        result =  self.encoder.encode(query_list)
+        return result
 
 class FaissSearcher:
     def __init__(self, device: str, index_dir: str, topk: int = 5):

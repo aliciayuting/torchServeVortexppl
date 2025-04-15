@@ -67,9 +67,10 @@ class SpeechPipelineHandler(BaseHandler):
             self.faiss_index_path = FAISS_INDEX_DIR
             self.doc_pickle_path = DOC_DIR
             self.text_check_model = "facebook/bart-large-mnli"
+            self.encoder_model_name = "BAAI/bge-small-en-v1.5"
 
             self.speech_model = AudioRecognition(self.device, self.sensevoice_model_name)
-            self.text_encoder = self.speech_model  # or separate if needed
+            self.text_encoder = TextEncoder(self.device, self.encoder_model_name)
             self.search_retriever = SearchRetriever(self.device, self.faiss_index_path, topk=5, doc_dir=self.doc_pickle_path)
             self.text_checker = TextChecker(self.device, self.text_check_model)
             self.tts_runner = TTSRunner(self.device)
@@ -90,7 +91,6 @@ class SpeechPipelineHandler(BaseHandler):
     def preprocess(self, data):
         try:
             start_time = time.time()
-            print(f"~~~~~~~~~~~~~~ [Preprocess] Received {len(data)} requests...", flush=True)
 
             input_data = data[0].get("body", data[0])  # fallback to raw dict if no 'body'
 
@@ -101,10 +101,9 @@ class SpeechPipelineHandler(BaseHandler):
             elif isinstance(input_data, str):
                 input_data = json.loads(input_data)
 
-            print(f"~~~~~~~~~~~~~~ [Preprocess] Raw Input: {input_data}", flush=True)
 
             audio_batch = input_data["audio_data"]
-            ids = input_data.get("ids", ["?"])
+            ids = input_data.get("question_ids", ["?"])
             print(f"~~~~~~~~~~~~~~ [Preprocess] IDs: {ids}", flush=True)
 
             audio_list = [np.array(waveform, dtype=np.float32) for waveform in audio_batch]
@@ -120,7 +119,7 @@ class SpeechPipelineHandler(BaseHandler):
 
         text_list = self.speech_model.exec_model(audio_list)
         print(f"~~~~~~~~~~~~~~ [Inference] Text list: {text_list}", flush=True)
-        embeddings = self.text_encoder.model.encode(text_list)
+        embeddings = self.text_encoder.encoder_exec(text_list)
         print(f"~~~~~~~~~~~~~~ [Inference] Embeddings: {embeddings}", flush=True)
         doc_lists = self.search_retriever.search_docs(embeddings)
         print(f"~~~~~~~~~~~~~~ [Inference] Document lists: {doc_lists}", flush=True)
