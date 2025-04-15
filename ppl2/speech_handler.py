@@ -104,16 +104,20 @@ class SpeechPipelineHandler(BaseHandler):
 
     def inference(self, inputs):
         audio_list, start_time = inputs
-
+        print(f"~~~~~~~~~~~~~~ [Inference] Processing {len(audio_list)} audio files...", flush=True)
         if not self.loaded_models:
             self.initialize(None)
 
         text_list = self.speech_model.exec_model(audio_list)
+        print(f"~~~~~~~~~~~~~~ [Inference] Text list: {text_list}", flush=True)
         embeddings = self.text_encoder.model.encode(text_list)
+        print(f"~~~~~~~~~~~~~~ [Inference] Embeddings: {embeddings}", flush=True)
         doc_lists = self.search_retriever.search_docs(embeddings)
+        print(f"~~~~~~~~~~~~~~ [Inference] Document lists: {doc_lists}", flush=True)
         check_results = self.text_checker.docs_check(doc_lists)
+        print(f"~~~~~~~~~~~~~~ [Inference] Check results: {check_results}", flush=True)
         audio_outputs = self.tts_runner.model_exec(doc_lists)
-
+        print(f"~~~~~~~~~~~~~~ [Inference] Audio outputs: {audio_outputs}", flush=True)
         end_time = time.time()
         duration = end_time - start_time
         batch_size = len(audio_list)
