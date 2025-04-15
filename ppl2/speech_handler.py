@@ -71,7 +71,7 @@ class SpeechPipelineHandler(BaseHandler):
 
             self.speech_model = AudioRecognition(self.device, self.sensevoice_model_name)
             self.text_encoder = TextEncoder(self.device, self.encoder_model_name)
-            self.search_retriever = SearchRetriever(self.device, self.faiss_index_path, topk=5, doc_dir=self.doc_pickle_path)
+            self.search_retriever = SearchRetriever(self.device, self.faiss_index_path, topk=1, doc_dir=self.doc_pickle_path)
             self.text_checker = TextChecker(self.device, self.text_check_model)
             self.tts_runner = TTSRunner(self.device)
 
