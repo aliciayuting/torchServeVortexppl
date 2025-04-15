@@ -1,3 +1,4 @@
+rm model_store/*
 EXTRA=$(find SenseVoice -type f | paste -sd "," -)
 torch-model-archiver \
   --model-name monospeech \
