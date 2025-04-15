@@ -29,29 +29,33 @@ class SpeechPipelineHandler(BaseHandler):
         self.loaded_models = False
 
     def initialize(self, ctx):
-        print("[TorchServe] Handler initializing...", flush=True)
-        self.device = "cuda"
+        try:
+            print("~~~~~~~~~~~~~ [TorchServe] Initializing...", flush=True)
+            self.device = "cuda"
 
-        self.sensevoice_model_name = "iic/SenseVoiceSmall"
-        self.faiss_index_path = FAISS_INDEX_DIR
-        self.doc_pickle_path = DOC_DIR
-        self.text_check_model = "facebook/bart-large-mnli"
+            self.sensevoice_model_name = "iic/SenseVoiceSmall"
+            self.faiss_index_path = FAISS_INDEX_DIR
+            self.doc_pickle_path = DOC_DIR
+            self.text_check_model = "facebook/bart-large-mnli"
 
-        self.speech_model = AudioRecognition(self.device, self.sensevoice_model_name)
-        self.text_encoder = self.speech_model  # or a separate encoder
-        self.search_retriever = SearchRetriever(self.device, self.faiss_index_path, topk=5, doc_dir=self.doc_pickle_path)
-        self.text_checker = TextChecker(self.device, self.text_check_model)
-        self.tts_runner = TTSRunner(self.device)
+            self.speech_model = AudioRecognition(self.device, self.sensevoice_model_name)
+            self.text_encoder = self.speech_model  # or a separate encoder
+            self.search_retriever = SearchRetriever(self.device, self.faiss_index_path, topk=5, doc_dir=self.doc_pickle_path)
+            self.text_checker = TextChecker(self.device, self.text_check_model)
+            self.tts_runner = TTSRunner(self.device)
 
-        self.speech_model.load_model()
-        self.search_retriever.load_model()
-        self.text_checker.load_model()
-        self.tts_runner.load_model()
+            self.speech_model.load_model()
+            self.search_retriever.load_model()
+            self.text_checker.load_model()
+            self.tts_runner.load_model()
 
-        self.loaded_models = True
-        self.initialized = True
-        print("~~~~~~~~~~~~~~~~ Speech handler initialized ~~~~~~~~~~~~`", flush=True)
-
+            self.loaded_models = True
+            self.initialized = True
+            print("~~~~~~~~~~~~~~~~ Speech handler initialized ~~~~~~~~~~~~`", flush=True)
+        except Exception as e:
+            import traceback
+            traceback.print_exc(file=sys.stderr)  # This is KEY!
+            raise e
 
     def preprocess(self, data):
         try:
