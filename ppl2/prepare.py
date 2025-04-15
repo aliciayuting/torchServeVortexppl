@@ -32,9 +32,9 @@ try:
     faiss_index_path = FAISS_INDEX_DIR
     doc_pickle_path = DOC_DIR
     text_check_model = "facebook/bart-large-mnli"
-
+    encoder_model_name = "BAAI/bge-small-en-v1.5"
     speech_model = AudioRecognition(device, sensevoice_model_name)
-    text_encoder = speech_model  # or a separate encoder
+    text_encoder =TextEncoder(device, encoder_model_name)
     search_retriever = SearchRetriever(device, faiss_index_path, topk=5, doc_dir=doc_pickle_path)
     text_checker = TextChecker(device, text_check_model)
     tts_runner = TTSRunner(device)
