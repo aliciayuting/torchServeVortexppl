@@ -20,8 +20,8 @@ from funasr.utils.postprocess_utils import rich_transcription_postprocess
 from funasr.utils.load_utils import extract_fbank
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "SenseVoice"))
-from .SenseVoice.utils.frontend import WavFrontend, WavFrontendOnline
-from .SenseVoice.model import SenseVoiceSmall
+from SenseVoice.utils.frontend import WavFrontend, WavFrontendOnline
+from SenseVoice.model import SenseVoiceSmall
 
 from transformers import BartTokenizer, BartForSequenceClassification
 
