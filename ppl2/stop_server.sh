@@ -1,1 +1,1 @@
-stop_server.sh
+torchserve --stop

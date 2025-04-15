@@ -1,1 +1,2 @@
-clear_logs.sh
+rm -rf ./*.csv logs
+clear
