@@ -127,7 +127,7 @@ class SpeechPipelineHandler(BaseHandler):
         per_item_duration = duration / batch_size if batch_size > 0 else 0
         for _ in range(batch_size):
             self.__class__.request_logs.append((start_time, end_time, per_item_duration))
-
+        print(f"~~~~~~ request logs length: {len(self.__class__.request_logs)}", flush=True)
         if len(self.__class__.request_logs) >= self.__class__.log_threshold:
             self.write_logs()
 
