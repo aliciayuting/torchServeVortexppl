@@ -91,12 +91,22 @@ class SpeechPipelineHandler(BaseHandler):
         try:
             start_time = time.time()
             print(f"~~~~~~~~~~~~~~ [Preprocess] Received {len(data)} requests...", flush=True)
-            input_data = data[0].get("body")
+
+            input_data = data[0].get("body", data[0])  # fallback to raw dict if no 'body'
+
+            # decode if it's bytes
             if isinstance(input_data, (bytes, bytearray)):
                 input_data = input_data.decode("utf-8")
-            input_json = json.loads(input_data)
-            audio_batch = input_json["audio_data"]
-            print(f"~~~~~~~~~~~~~~ [Preprocess] IDs: {input_json['ids']}", flush=True)
+                input_data = json.loads(input_data)
+            elif isinstance(input_data, str):
+                input_data = json.loads(input_data)
+
+            print(f"~~~~~~~~~~~~~~ [Preprocess] Raw Input: {input_data}", flush=True)
+
+            audio_batch = input_data["audio_data"]
+            ids = input_data.get("ids", ["?"])
+            print(f"~~~~~~~~~~~~~~ [Preprocess] IDs: {ids}", flush=True)
+
             audio_list = [np.array(waveform, dtype=np.float32) for waveform in audio_batch]
             return audio_list, start_time
         except Exception as e:
