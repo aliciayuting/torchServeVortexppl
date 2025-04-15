@@ -11,21 +11,7 @@ import sys
 import faiss
 import pickle
 
-
 import zipfile
-
-# Unzip SenseVoice if needed
-this_dir = os.path.dirname(os.path.abspath(__file__))
-zip_path = os.path.join(this_dir, "sensevoice_bundle.zip")
-sensevoice_path = os.path.join(this_dir, "SenseVoice")
-
-if not os.path.exists(sensevoice_path) and os.path.exists(zip_path):
-    print("[speechRetrieve] Extracting SenseVoice zip...", flush=True)
-    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-        zip_ref.extractall(this_dir)
-
-if sensevoice_path not in sys.path:
-    sys.path.append(sensevoice_path)
 
 from nemo.collections.tts.models import FastPitchModel, HifiGanModel
 from torch.nn.utils.rnn import pad_sequence
@@ -34,8 +20,8 @@ from funasr.utils.postprocess_utils import rich_transcription_postprocess
 from funasr.utils.load_utils import extract_fbank
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "SenseVoice"))
-from SenseVoice.utils.frontend import WavFrontend, WavFrontendOnline
-from SenseVoice.model import SenseVoiceSmall
+from .SenseVoice.utils.frontend import WavFrontend, WavFrontendOnline
+from .SenseVoice.model import SenseVoiceSmall
 
 from transformers import BartTokenizer, BartForSequenceClassification
 
