@@ -139,7 +139,8 @@ class SpeechPipelineHandler(BaseHandler):
                 "query": text_list[idx],
                 "docs": doc_lists[idx],
                 "harm_scores": check_results[idx],
-                "tts_audio_base64": audio_base64
+                "tts_audio_base64": 1
+                # "tts_audio_base64": audio_base64  # use 1 for testing
             })
         return results
 
