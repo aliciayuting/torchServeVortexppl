@@ -194,8 +194,10 @@ class TextChecker:
         inputs = self.tokenizer(batch_premise,
                        [self.hypothesis] * len(batch_premise),
                        return_tensors='pt', padding=True, truncation=True).to(self.device)
+        print(f"~~~~~~~~~~~~~~ [TEXTCHECKER] Inputs: {inputs}", flush=True)
         with torch.no_grad():
             result = self.model(**inputs)
+        print(f"~~~~~~~~~~~~~~ [TEXTCHECKER] Result: {result}", flush=True)
         logits = result.logits
         entail_contradiction_logits = logits[:, [0, 2]]  # entailment = index 2
         probs = entail_contradiction_logits.softmax(dim=1)
