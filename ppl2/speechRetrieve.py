@@ -205,7 +205,9 @@ class TextChecker:
     
     def docs_check(self, doc_list: list[list[str]]) -> list[list[int]]:
         flattened_doc_list = [item for sublist in doc_list for item in sublist]
+        print(f"~~~~~~~~~~~~~~ [TEXTCHECKER] Flattened doc list: {flattened_doc_list}", flush=True)
         types = self.model_exec(flattened_doc_list)
+        print(f"~~~~~~~~~~~~~~ [TEXTCHECKER] Text check results: {types}", flush=True)
         # Reshape the types to match the original doc_list structure
         reshaped_types = []
         start = 0
