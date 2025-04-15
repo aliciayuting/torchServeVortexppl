@@ -39,7 +39,7 @@ AudioRecognition = SearchRetriever = TextChecker = TTSRunner = None  # placehold
 # ---------------------------------------------
 class SpeechPipelineHandler(BaseHandler):
     request_logs = []
-    log_threshold = 1000
+    log_threshold = 249
     log_path = os.path.join(model_dir, "inference_times.csv")
 
     def __init__(self):
@@ -120,7 +120,6 @@ class SpeechPipelineHandler(BaseHandler):
         doc_lists = self.search_retriever.search_docs(embeddings)
         check_results = self.text_checker.docs_check(doc_lists)
         audio_outputs = self.tts_runner.model_exec(doc_lists)
-        print(f"~~~~~~~~~~~~~~ [Inference] Audio outputs: {audio_outputs}", flush=True)
         end_time = time.time()
         duration = end_time - start_time
         batch_size = len(audio_list)
