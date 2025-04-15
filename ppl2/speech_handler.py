@@ -8,7 +8,7 @@ import zipfile
 import torch
 import numpy as np
 from ts.torch_handler.base_handler import BaseHandler
-from speechRetrieve import AudioRecognition, SearchRetriever, TextChecker, TTSRunner
+# from speechRetrieve import AudioRecognition, SearchRetriever, TextChecker, TTSRunner
 
 # ---------------------------------------------
 # Constants
@@ -52,7 +52,16 @@ class SpeechPipelineHandler(BaseHandler):
 
         try:
             print("~~~~~~~~~~~~~ [TorchServe] Initializing SpeechPipelineHandler...", flush=True)
+            zip_path = os.path.join(model_dir, "sensevoice_bundle.zip")
+            if os.path.exists(zip_path):
+                import zipfile
+                with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+                    zip_ref.extractall(model_dir)
 
+            sensevoice_path = os.path.join(model_dir, "SenseVoice")
+            if sensevoice_path not in sys.path:
+                sys.path.append(sensevoice_path)
+            from speechRetrieve import AudioRecognition, SearchRetriever, TextChecker, TTSRunner
             self.device = "cuda"
             self.sensevoice_model_name = "iic/SenseVoiceSmall"
             self.faiss_index_path = FAISS_INDEX_DIR
