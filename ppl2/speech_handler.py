@@ -50,7 +50,8 @@ class SpeechPipelineHandler(BaseHandler):
 
         self.loaded_models = True
         self.initialized = True
-        print("[TorchServe] Handler initialized.", flush=True)
+        print("~~~~~~~~~~~~~~~~ Speech handler initialized ~~~~~~~~~~~~`", flush=True)
+
 
     def preprocess(self, data):
         try:

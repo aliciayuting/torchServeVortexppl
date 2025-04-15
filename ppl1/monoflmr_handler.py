@@ -44,7 +44,6 @@ class MonoFLMRHandler(BaseHandler):
         self.pipeline.load_model_gpu()
 
         self.initialized = True
-        print("~~~~~~~~~~~~~~~~ MONOFLMR handler initialized ~~~~~~~~~~~~`", flush=True)
 
     def preprocess(self, data):
         input_ids, attention_mask, pixel_values, question_ids, text_sequence = [], [], [], [], []
