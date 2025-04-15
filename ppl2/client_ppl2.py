@@ -57,8 +57,12 @@ async def send_request(session, batch_idx, payload, node_url):
                 text = await resp.text()
                 print(f"[Batch {batch_idx}] {url} -> {status} -> {text}")
             else:
-                text = await resp.json()
-                print(f"[Batch {batch_idx}] {url} -> {status} -> {text}")
+                text = await resp.text()
+                try:
+                    parsed = json.loads(text)
+                    print(f"[Batch {batch_idx}] {url} -> {status} -> {parsed}")
+                except json.JSONDecodeError:
+                    print(f"[Batch {batch_idx}] {url} -> {status} (non-JSON) -> {text}")
             results_log.append((batch_idx, node_url, status, latency, success))
     except Exception as e:
         end = time.time()

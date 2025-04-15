@@ -104,7 +104,6 @@ class SpeechPipelineHandler(BaseHandler):
 
             audio_batch = input_data["audio_data"]
             ids = input_data.get("question_ids", ["?"])
-            print(f"~~~~~~~~~~~~~~ [Preprocess] IDs: {ids}", flush=True)
 
             audio_list = [np.array(waveform, dtype=np.float32) for waveform in audio_batch]
             return audio_list, start_time
@@ -113,18 +112,13 @@ class SpeechPipelineHandler(BaseHandler):
 
     def inference(self, inputs):
         audio_list, start_time = inputs
-        print(f"~~~~~~~~~~~~~~ [Inference] Processing {len(audio_list)} audio files...", flush=True)
         if not self.loaded_models:
             self.initialize(None)
 
         text_list = self.speech_model.exec_model(audio_list)
-        print(f"~~~~~~~~~~~~~~ [Inference] Text list: {text_list}", flush=True)
         embeddings = self.text_encoder.encoder_exec(text_list)
-        print(f"~~~~~~~~~~~~~~ [Inference] Embeddings: {embeddings}", flush=True)
         doc_lists = self.search_retriever.search_docs(embeddings)
-        print(f"~~~~~~~~~~~~~~ [Inference] Document lists: {doc_lists}", flush=True)
         check_results = self.text_checker.docs_check(doc_lists)
-        print(f"~~~~~~~~~~~~~~ [Inference] Check results: {check_results}", flush=True)
         audio_outputs = self.tts_runner.model_exec(doc_lists)
         print(f"~~~~~~~~~~~~~~ [Inference] Audio outputs: {audio_outputs}", flush=True)
         end_time = time.time()
@@ -150,7 +144,7 @@ class SpeechPipelineHandler(BaseHandler):
         return results
 
     def postprocess(self, inference_output):
-        return inference_output
+        return [{"output": result} for result in inference_output]
 
     def write_logs(self):
         os.makedirs(os.path.dirname(self.log_path), exist_ok=True)
