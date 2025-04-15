@@ -13,7 +13,7 @@ REMOTE_NODES = [
     "http://10.10.1.3:8080",
     "http://10.10.1.4:8080",
 ]
-ENDPOINT_PATH = "/predictions/mono_speech"
+ENDPOINT_PATH = "/predictions/monospeech"
 HEADERS = {"Authorization": "GOJI"}  # Optional, remove if token auth is off
 
 SEND_INTERVAL_SEC = 0.01
