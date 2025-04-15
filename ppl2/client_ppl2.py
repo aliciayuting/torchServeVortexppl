@@ -8,10 +8,10 @@ from torch.utils.data import DataLoader
 # Config
 # ---------------------------------------------
 REMOTE_NODES = [
-    "http://10.0.0.1:8080",
-    "http://10.0.0.2:8080",
-    "http://10.0.0.3:8080",
-    "http://10.0.0.4:8080",
+    "http://10.10.1.1:8080",
+    "http://10.10.1.2:8080",
+    "http://10.10.1.3:8080",
+    "http://10.10.1.4:8080",
 ]
 ENDPOINT_PATH = "/predictions/mono_speech"
 HEADERS = {"Authorization": "GOJI"}  # Optional, remove if token auth is off
