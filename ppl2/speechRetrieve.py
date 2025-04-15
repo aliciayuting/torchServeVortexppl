@@ -10,6 +10,7 @@ import threading
 import sys
 import faiss
 import pickle
+import torch
 
 import zipfile
 
