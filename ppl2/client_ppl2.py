@@ -17,7 +17,7 @@ ENDPOINT_PATH = "/predictions/monospeech"
 HEADERS = {"Authorization": "GOJI"}  # Optional, remove if token auth is off
 
 SEND_INTERVAL_SEC = 0.01
-MAX_REQUESTS = 10
+MAX_REQUESTS = 1000
 RESULT_LOG_PATH = "/tmp/async_audio_results.csv"
 
 BS = 1
