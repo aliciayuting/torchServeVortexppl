@@ -159,7 +159,7 @@ class SpeechPipelineHandler(BaseHandler):
         throughput = total_requests / time_span if time_span > 0 else 0.0
         throughput_str = f"{throughput:.2f}reqps"
         root, _ = os.path.splitext(self.log_path)
-        final_log_path = f"{root}_{throughput_str}.csv"
+        final_log_path = f"{root}.csv"
 
         print(f"[TorchServe] Writing {len(self.request_logs)} log entries to {final_log_path}", file=sys.stderr, flush=True)
 
