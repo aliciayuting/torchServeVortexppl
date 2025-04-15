@@ -1,17 +1,13 @@
 rm model_store/*
-#!/bin/bash
+EXTRA=$(find SenseVoice -type f | paste -sd "," -)
 
-MODEL_NAME=monospeech
-HANDLER=speech_handler.py
-EXTRA_FILES="speechRetrieve.py"
-
-# Add all files under SenseVoice/ recursively
-EXTRA_FILES+=",$(find SenseVoice -type f | paste -sd "," -)"
+echo "Extra files to include:"
+echo "$EXTRA"
 
 torch-model-archiver \
-  --model-name "$MODEL_NAME" \
+  --model-name monospeech \
   --version 1.0 \
-  --handler "$HANDLER" \
-  --extra-files "$EXTRA_FILES" \
+  --handler speech_handler.py \
+  --extra-files "${EXTRA},speechRetrieve.py" \
   --export-path model_store \
   --force
