@@ -9,6 +9,8 @@ from typing import Any
 import threading
 import sys
 import faiss
+import pickle
+
 
 from nemo.collections.tts.models import FastPitchModel, HifiGanModel
 from torch.nn.utils.rnn import pad_sequence
