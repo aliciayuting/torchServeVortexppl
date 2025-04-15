@@ -191,19 +191,25 @@ class TextChecker:
         '''
         if self.model is None:
             self.load_model()
-        inputs = self.tokenizer(batch_premise,
-                       [self.hypothesis] * len(batch_premise),
-                       return_tensors='pt', padding=True, truncation=True).to(self.device)
-        print(f"~~~~~~~~~~~~~~ [TEXTCHECKER] Inputs: {inputs}", flush=True)
-        with torch.no_grad():
-            result = self.model(**inputs)
-        print(f"~~~~~~~~~~~~~~ [TEXTCHECKER] Result: {result}", flush=True)
-        logits = result.logits
-        entail_contradiction_logits = logits[:, [0, 2]]  # entailment = index 2
-        probs = entail_contradiction_logits.softmax(dim=1)
-        true_probs = probs[:, 1] * 100  # entailment probability
-        true_probs = [int(x) for x in true_probs]
-        return true_probs
+        try:
+            inputs = self.tokenizer(batch_premise,
+                        [self.hypothesis] * len(batch_premise),
+                        return_tensors='pt', padding=True, truncation=True).to(self.device)
+            print(f"~~~~~~~~~~~~~~ [TEXTCHECKER] Inputs: {inputs}", flush=True)
+            with torch.no_grad():
+                result = self.model(**inputs)
+            print(f"~~~~~~~~~~~~~~ [TEXTCHECKER] Result: {result}", flush=True)
+            logits = result.logits
+            entail_contradiction_logits = logits[:, [0, 2]]  # entailment = index 2
+            probs = entail_contradiction_logits.softmax(dim=1)
+            true_probs = probs[:, 1] * 100  # entailment probability
+            true_probs = [int(x) for x in true_probs]
+            return true_probs
+        except Exception as e:
+            import traceback
+            print(f"[TEXTCHECKER] ERROR during model_exec: {e}", file=sys.stderr, flush=True)
+            traceback.print_exc(file=sys.stderr)
+            return [-1 for _ in batch_premise]  # or raise to fail hard
     
     def docs_check(self, doc_list: list[list[str]]) -> list[list[int]]:
         flattened_doc_list = [item for sublist in doc_list for item in sublist]
