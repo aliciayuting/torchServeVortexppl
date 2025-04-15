@@ -48,7 +48,7 @@ async def send_request(session, batch_idx, payload, node_url):
     url = f"{node_url}{ENDPOINT_PATH}"
     start = time.time()
     try:
-        async with session.post(url, json=payload, headers=HEADERS, timeout=60) as resp:
+        async with session.post(url, json=payload, headers=HEADERS, timeout=1200) as resp:
             end = time.time()
             latency = end - start
             status = resp.status
