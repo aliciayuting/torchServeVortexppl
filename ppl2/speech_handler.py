@@ -39,7 +39,7 @@ AudioRecognition = SearchRetriever = TextChecker = TTSRunner = None  # placehold
 # ---------------------------------------------
 class SpeechPipelineHandler(BaseHandler):
     request_logs = []
-    log_threshold = 249
+    log_threshold = 10
     log_path = os.path.join(model_dir, "inference_times.csv")
 
     def __init__(self):

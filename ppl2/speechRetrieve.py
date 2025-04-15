@@ -196,10 +196,8 @@ class TextChecker:
             inputs = self.tokenizer(batch_premise,
                         [self.hypothesis] * len(batch_premise),
                         return_tensors='pt', padding=True, truncation=True).to(self.device)
-            print(f"~~~~~~~~~~~~~~ [TEXTCHECKER] Inputs: {inputs}", flush=True)
             with torch.no_grad():
                 result = self.model(**inputs)
-            print(f"~~~~~~~~~~~~~~ [TEXTCHECKER] Result: {result}", flush=True)
             logits = result.logits
             entail_contradiction_logits = logits[:, [0, 2]]  # entailment = index 2
             probs = entail_contradiction_logits.softmax(dim=1)
@@ -214,9 +212,7 @@ class TextChecker:
     
     def docs_check(self, doc_list: list[list[str]]) -> list[list[int]]:
         flattened_doc_list = [item for sublist in doc_list for item in sublist]
-        print(f"~~~~~~~~~~~~~~ [TEXTCHECKER] Flattened doc list: {flattened_doc_list}", flush=True)
         types = self.model_exec(flattened_doc_list)
-        print(f"~~~~~~~~~~~~~~ [TEXTCHECKER] Text check results: {types}", flush=True)
         # Reshape the types to match the original doc_list structure
         reshaped_types = []
         start = 0
