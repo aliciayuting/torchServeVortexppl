@@ -8,7 +8,7 @@ import csv
 import base64
 import numpy as np
 from ts.torch_handler.base_handler import BaseHandler
-from speechRetrieve import AudioRecognition, SearchRetriever, TextChecker, TTSRunner
+from speechRetrieve import TextEncoder, AudioRecognition, SearchRetriever, TextChecker, TTSRunner
 import pickle
 model_dir = os.path.dirname(os.path.abspath(__file__))
 sensevoice_path = os.path.join(model_dir, "SenseVoice")

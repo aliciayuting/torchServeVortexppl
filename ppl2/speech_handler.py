@@ -48,7 +48,7 @@ class SpeechPipelineHandler(BaseHandler):
         self.loaded_models = False
 
     def initialize(self, ctx):
-        global AudioRecognition, SearchRetriever, TextChecker, TTSRunner
+        global AudioRecognition,TextEncoder, SearchRetriever, TextChecker, TTSRunner
 
         try:
             print("~~~~~~~~~~~~~ [TorchServe] Initializing SpeechPipelineHandler...", flush=True)
@@ -61,7 +61,7 @@ class SpeechPipelineHandler(BaseHandler):
             sensevoice_path = os.path.join(model_dir, "SenseVoice")
             if sensevoice_path not in sys.path:
                 sys.path.append(sensevoice_path)
-            from speechRetrieve import AudioRecognition, SearchRetriever, TextChecker, TTSRunner
+            from speechRetrieve import AudioRecognition,TextEncoder, SearchRetriever, TextChecker, TTSRunner
             self.device = "cuda"
             self.sensevoice_model_name = "iic/SenseVoiceSmall"
             self.faiss_index_path = FAISS_INDEX_DIR
